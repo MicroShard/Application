@@ -1,0 +1,26 @@
+{
+  "name": "microshard/application",
+  "authors" : [{
+    "name" : "Rene Winklewski",
+    "email" : "rene.winklewski@gmail.com"
+  }],
+  "keywords" : [],
+  "license" : [
+    "MIT"
+  ],
+  "minimum-stability": "dev",
+  "autoload": {
+    "psr-4" : {
+      "Microshard\\Application\\" : "src/",
+      "Microshard\\Application\\Test\\" : "tests/"
+    }
+  },
+  "require": {
+    "php": "^7.0",
+    "guzzlehttp/guzzle": "^6"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7.0",
+    "php-mock/php-mock": "^2.0"
+  }
+}
