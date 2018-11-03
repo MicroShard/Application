@@ -2,9 +2,9 @@
 
 namespace Application\Routing;
 
-use Monolith\Core\Container;
-use Monolith\Core\EventManager\Context;
-use Monolith\Core\SystemException;
+
+use Application\Container;
+use Application\Exception\SystemException;
 use Psr\Http\Message\ServerRequestInterface;
 
 class Router
@@ -66,9 +66,6 @@ class Router
      */
     public function handleRequest(ServerRequestInterface $request)
     {
-        $this->getContainer()->getService('events')
-            ->dispatchEvent('router.init', new Context());
-
         $dispatched = false;
         if ($request->getUri()->getPath() == '/') {
             $dispatched = true;

@@ -1,9 +1,10 @@
 <?php
 
-namespace Monolith\Core\Frontend;
+namespace Application\Frontend;
 
-use Monolith\Core\Container;
-use Monolith\Core\SystemException;
+
+use Application\Container;
+use Application\Exception\SystemException;
 
 class Layout
 {

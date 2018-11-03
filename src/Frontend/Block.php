@@ -1,8 +1,9 @@
 <?php
 
-namespace Monolith\Core\Frontend;
+namespace Application\Frontend;
 
-use Monolith\Core\SystemException;
+
+use Application\Exception\SystemException;
 
 class Block
 {

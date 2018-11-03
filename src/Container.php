@@ -102,4 +102,13 @@ class Container
         }
         return $this->services[$name];
     }
+
+    /**
+     * @param $name
+     * @return bool
+     */
+    public function hasService($name): bool
+    {
+        return isset($this->serviceDefinitions[$name]) || isset($this->services[$name]);
+    }
 }
