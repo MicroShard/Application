@@ -12,22 +12,32 @@ class Container
     /**
      * @var Configuration
      */
-    protected $configuration;
+    private $configuration;
 
     /**
      * @var Closure[]
      */
-    protected $serviceDefinitions = [];
+    private $serviceDefinitions = [];
 
     /**
      * @var array
      */
-    protected $hooks = [];
+    private $hooks = [];
 
     /**
      * @var array
      */
-    protected $services = [];
+    private $services = [];
+
+    /**
+     * @var Closure[]
+     */
+    private $patterns = [];
+
+    /**
+     * @var Closure[]
+     */
+    private $constructorPatterns = [];
 
     /**
      * Container constructor.
@@ -49,7 +59,7 @@ class Container
     /**
      * @param string $name
      * @param Closure $constructor
-     * @return $this
+     * @return Container
      */
     public function addServiceDefinition(string $name, Closure $constructor): self
     {
@@ -74,7 +84,7 @@ class Container
     /**
      * @param string $name
      * @param mixed $service
-     * @return $this
+     * @return Container
      */
     private function addService(string $name, $service): self
     {
@@ -110,5 +120,76 @@ class Container
     public function hasService($name): bool
     {
         return isset($this->serviceDefinitions[$name]) || isset($this->services[$name]);
+    }
+
+    /**
+     * @param string $name
+     * @param Closure $closure
+     * @return Container
+     */
+    public function addPattern(string $name, Closure $closure): self
+    {
+        $this->patterns[$name] = $closure;
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     * @return Closure
+     * @throws SystemException
+     */
+    private function getPattern(string $name): Closure
+    {
+        if (!isset($this->patterns[$name])) {
+            throw new SystemException('unknown pattern: ' . $name);
+        }
+        return $this->patterns[$name];
+    }
+
+    /**
+     * @param string $name
+     * @param Closure $closure
+     * @return Container
+     */
+    public function addConstructorPattern(string $name, Closure $closure): self
+    {
+        $this->constructorPatterns[$name] = $closure;
+        return $this;
+    }
+
+    /**
+     * @param string $name
+     * @return Closure
+     * @throws SystemException
+     */
+    private function getConstructorPattern(string $name): Closure
+    {
+        if (!isset($this->constructorPatterns[$name])) {
+            throw new SystemException('unknown constructor pattern: ' . $name);
+        }
+        return $this->constructorPatterns[$name];
+    }
+
+    /**
+     * @param string $class
+     * @param string $patternName
+     * @return mixed
+     */
+    public function applyConstructorPattern(string $class, string $patternName)
+    {
+        $pattern = $this->getConstructorPattern($patternName);
+        return $pattern($class, $this);
+    }
+
+    /**
+     * @param $service
+     * @param string $patternName
+     * @return Container
+     */
+    public function applyPattern($service, string $patternName): self
+    {
+        $pattern = $this->getPattern($patternName);
+        $pattern($service, $this);
+        return $this;
     }
 }
