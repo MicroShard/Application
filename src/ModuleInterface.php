@@ -8,5 +8,5 @@ interface ModuleInterface
     /**
      * @param Container $container
      */
-    public function setup(Container $container);
+    public static function setup(Container $container);
 }
