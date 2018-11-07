@@ -83,4 +83,14 @@ class Layout
         return rtrim($templateDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR
             . ltrim($templatePath, DIRECTORY_SEPARATOR);
     }
+
+    /**
+     * @param string $name
+     * @return Composition
+     * @throws SystemException
+     */
+    public function getComposition(string $name): Composition
+    {
+        return $this->getContainer()->fabricate($name);
+    }
 }

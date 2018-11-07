@@ -3,8 +3,6 @@
 namespace Application\Frontend;
 
 
-use Application\Routing\Router;
-
 class Controller
 {
     /**
@@ -13,18 +11,11 @@ class Controller
     private $layout;
 
     /**
-     * @var Router
-     */
-    private $router;
-
-    /**
      * @param Layout $layout
-     * @param Router $router
      */
-    public function __construct(Layout $layout, Router $router)
+    public function __construct(Layout $layout)
     {
         $this->layout = $layout;
-        $this->router = $router;
     }
 
     /**
@@ -33,13 +24,5 @@ class Controller
     protected function getLayout(): Layout
     {
         return $this->layout;
-    }
-
-    /**
-     * @param string $path
-     */
-    protected function redirect(string $path)
-    {
-        $this->router->redirect($path);
     }
 }

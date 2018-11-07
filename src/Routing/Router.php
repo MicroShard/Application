@@ -5,6 +5,7 @@ namespace Application\Routing;
 
 use Application\Container;
 use Application\Exception\SystemException;
+use Application\Frontend\Response;
 use Psr\Http\Message\ServerRequestInterface;
 
 class Router
@@ -62,29 +63,31 @@ class Router
 
     /**
      * @param ServerRequestInterface $request
+     * @param Response $response
      * @throws SystemException
      */
-    public function handleRequest(ServerRequestInterface $request)
+    public function handleRequest(ServerRequestInterface $request, Response $response)
     {
         $dispatched = false;
-        if ($request->getUri()->getPath() == '/') {
+        if ($request->getUri()->getPath() == '/' && ($route = $this->getRouteByName(self::DEFAULT_ROUTE_INDEX))) {
             $dispatched = true;
-            $this->dispatch($this->getRouteByName(self::DEFAULT_ROUTE_INDEX), $request);
+            $this->dispatch($route, $request, $response);
         } else {
-            $dispatched = $this->checkRoutes($request);
+            $dispatched = $this->checkRoutes($request, $response);
         }
 
-        if (!$dispatched) {
-            $this->dispatch($this->getRouteByName(self::DEFAULT_ROUTE_404), $request);
+        if (!$dispatched && ($route = $this->getRouteByName(self::DEFAULT_ROUTE_404))) {
+            $this->dispatch($route, $request, $response);
         }
     }
 
     /**
      * @param ServerRequestInterface $request
+     * @param Response $response
      * @return bool
      * @throws SystemException
      */
-    private function checkRoutes(ServerRequestInterface $request): bool
+    private function checkRoutes(ServerRequestInterface $request, Response $response): bool
     {
         $dispatched = false;
         $requestPath = $request->getUri()->getPath();
@@ -93,14 +96,16 @@ class Router
                 continue;
             }
 
-            if (preg_match($route->getRoute(), $requestPath, $matches)) {
+            if ($route->match($requestPath,$routeParams)) {
                 $dispatched = true;
 
                 try {
-                    $this->dispatch($route, $request);
+                    $this->dispatch($route, $request, $response);
                 } catch (\Exception $e) {
                     error_log($e);
-                    $this->dispatch($this->getRouteByName(self::DEFAULT_ROUTE_500), $request);
+                    if ($route = $this->getRouteByName(self::DEFAULT_ROUTE_500)) {
+                        $this->dispatch($route, $request, $response);
+                    }
                 }
                 break;
             }
@@ -111,30 +116,18 @@ class Router
     /**
      * @param Route $route
      * @param ServerRequestInterface $request
+     * @param Response $response
      * @return Router
      * @throws SystemException
      */
-    private function dispatch(Route $route, ServerRequestInterface $request): self
+    private function dispatch(Route $route, ServerRequestInterface $request, Response $response): self
     {
         $controller = $this->getContainer()->getService($route->getControllerName());
         if (!method_exists($controller, $route->getActionName())) {
             throw new SystemException('invalid route');
         }
 
-        $controller->{$route->getActionName()}($request);
+        $controller->{$route->getActionName()}($request, $response);
         return $this;
-    }
-
-    /**
-     * @param string $path
-     * @return $this
-     */
-    public function redirect(string $path)
-    {
-        $location = $this->getContainer()->getConfiguration()->get('base_url');
-        $location = rtrim($location, '/') . '/' . ltrim($path, '/');
-
-        header("Location: $location");
-        die();
     }
 }

@@ -105,4 +105,14 @@ class Route
     {
         return $this->actionName;
     }
+
+    /**
+     * @param string $requestPath
+     * @param array $matches
+     * @return bool
+     */
+    public function match(string $requestPath, array &$matches = []): bool
+    {
+        return (bool) preg_match($this->getRoute(), $requestPath, $matches);
+    }
 }

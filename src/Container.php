@@ -30,6 +30,11 @@ class Container
     private $services = [];
 
     /**
+     * @var array
+     */
+    private $factories = [];
+
+    /**
      * @var Closure[]
      */
     private $patterns = [];
@@ -174,6 +179,7 @@ class Container
      * @param string $class
      * @param string $patternName
      * @return mixed
+     * @throws SystemException
      */
     public function applyConstructorPattern(string $class, string $patternName)
     {
@@ -185,11 +191,36 @@ class Container
      * @param $service
      * @param string $patternName
      * @return Container
+     * @throws SystemException
      */
     public function applyPattern($service, string $patternName): self
     {
         $pattern = $this->getPattern($patternName);
         $pattern($service, $this);
         return $this;
+    }
+
+    /**
+     * @param string $factoryName
+     * @param Closure $factory
+     * @return Container
+     */
+    public function addFactory(string $factoryName, Closure $factory): self
+    {
+        $this->factories[$factoryName] = $factory;
+        return $this;
+    }
+
+    /**
+     * @param string $factoryName
+     * @return mixed
+     * @throws SystemException
+     */
+    public function fabricate(string $factoryName)
+    {
+        if (!isset($this->factories[$factoryName])) {
+            throw new SystemException('unknown factory: ' . $factoryName);
+        }
+        return $this->factories[$factoryName]($this);
     }
 }
