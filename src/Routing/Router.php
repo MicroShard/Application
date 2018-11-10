@@ -96,6 +96,7 @@ class Router
                 continue;
             }
 
+            $routeParams = [];
             if ($route->match($requestPath,$routeParams)) {
                 $dispatched = true;
 
