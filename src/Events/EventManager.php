@@ -1,10 +1,10 @@
 <?php
 
-namespace Application\Events;
+namespace Microshard\Application\Events;
 
 
-use Application\Container;
-use Application\Exception\SystemException;
+use Microshard\Application\Container;
+use Microshard\Application\Exception\SystemException;
 
 class EventManager
 {

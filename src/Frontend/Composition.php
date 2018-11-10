@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Frontend;
+namespace Microshard\Application\Frontend;
 
 abstract class Composition
 {

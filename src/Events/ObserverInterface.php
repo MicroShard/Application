@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Events;
+namespace Microshard\Application\Events;
 
 interface ObserverInterface
 {

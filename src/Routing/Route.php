@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Routing;
+namespace Microshard\Application\Routing;
 
 class Route
 {

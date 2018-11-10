@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Exception;
+namespace Microshard\Application\Exception;
 
 class SystemException extends \Exception
 {

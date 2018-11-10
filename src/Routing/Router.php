@@ -1,11 +1,11 @@
 <?php
 
-namespace Application\Routing;
+namespace Microshard\Application\Routing;
 
 
-use Application\Container;
-use Application\Exception\SystemException;
-use Application\Frontend\Response;
+use Microshard\Application\Container;
+use Microshard\Application\Exception\SystemException;
+use Microshard\Application\Frontend\Response;
 use Psr\Http\Message\ServerRequestInterface;
 
 class Router

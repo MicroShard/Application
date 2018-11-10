@@ -1,10 +1,10 @@
 <?php
 
-namespace Application\Frontend;
+namespace Microshard\Application\Frontend;
 
 
-use Application\Container;
-use Application\Exception\SystemException;
+use Microshard\Application\Container;
+use Microshard\Application\Exception\SystemException;
 
 class Layout
 {

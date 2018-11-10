@@ -1,8 +1,8 @@
 <?php
 
-namespace Application;
+namespace Microshard\Application;
 
-use Application\Exception\SystemException;
+use Microshard\Application\Exception\SystemException;
 use Closure;
 
 

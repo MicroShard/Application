@@ -1,9 +1,9 @@
 <?php
 
-namespace Application\Frontend;
+namespace Microshard\Application\Frontend;
 
 
-use Application\Exception\SystemException;
+use Microshard\Application\Exception\SystemException;
 
 class Block
 {
