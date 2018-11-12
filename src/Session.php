@@ -7,12 +7,26 @@ class Session
     const MESSAGE_NOTICE = 'notice';
     const MESSAGE_SUCCESS = 'success';
     const MESSAGE_ERROR = 'error';
+    /**
+     * @var string
+     */
+    private $sessionName;
+
+    /**
+     * Session constructor.
+     * @param string $sessionName
+     */
+    public function __construct(string $sessionName)
+    {
+        $this->sessionName = $sessionName;
+    }
 
     /**
      * @return Session
      */
     public function start(): self
     {
+        session_name($this->sessionName);
         session_start();
         return $this;
     }
