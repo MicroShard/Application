@@ -11,6 +11,16 @@ class Collection implements \Iterator
     private $items = [];
 
     /**
+     * @param array $items
+     * @return Collection
+     */
+    public function setItems(array $items): self
+    {
+        $this->items = $items;
+        return $this;
+    }
+
+    /**
      * @return AbstractEntity[]
      */
     public function getItems(): array
